@@ -44,7 +44,7 @@ def createCharacter(name):
 				epithet = epithets[i + 6]
 			
 	
-	reply = str(name) + " the " + epithet + '\n\n'
+	reply = str(name[0]) + " the " + epithet + '\n\n'
 	reply += "Strength: " + str(abilities[0]) + '\n\n'
 	reply += "Dexterity: " + str(abilities[1]) + '\n\n'
 	reply += "Constitution: " + str(abilities[2]) + '\n\n'
@@ -99,6 +99,7 @@ for submission in subreddit.get_hot(limit=10):
                 print "Bot replying to comment: ", comment.id
                 comment.reply(createCharacter(playerName))
                 replies.append(comment.id)
+		#print str(playerName[0])
 
 # Save new replies
 print "Saving ids to file"
