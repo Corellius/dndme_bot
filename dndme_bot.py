@@ -1,4 +1,4 @@
-#!/usr/local/bin/python
+#!/usr/bin/python
 import praw
 import re
 import os
@@ -44,12 +44,12 @@ def createCharacter(name):
 				epithet = epithets[i + 6]
 			
 	
-	reply = name + " the " + epithet + '\n'
-	reply += "Strength: " + str(abilities[0]) + '\n'
-	reply += "Dexterity: " + str(abilities[1]) + '\n'
-	reply += "Constitution: " + str(abilities[2]) + '\n'
-	reply += "Intelligence: " + str(abilities[3]) + '\n'
-	reply += "Wisdom: " + str(abilities[4]) + '\n'
+	reply = str(name) + " the " + epithet + '\n\n'
+	reply += "Strength: " + str(abilities[0]) + '\n\n'
+	reply += "Dexterity: " + str(abilities[1]) + '\n\n'
+	reply += "Constitution: " + str(abilities[2]) + '\n\n'
+	reply += "Intelligence: " + str(abilities[3]) + '\n\n'
+	reply += "Wisdom: " + str(abilities[4]) + '\n\n'
 	reply += "Charisma: " + str(abilities[5])
 	return reply
 
