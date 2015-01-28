@@ -7,52 +7,51 @@ import random
 
 # This list contains the epithets that are associated with certain scores. The first six are for when a user gets a very low number in a particular ability score. The order goes as follows: Strength, Dexterity, Constitution, Intelligence, Wisdom, and Charisma. The next six are for when players get a particularly high number for a particular ability score. Order is the same as for the first six. The final six are for when a player gets the highest possible result, an 18, for an ability score. Order is the same as the last two.
 
-epithets = ['Noodle-Arm', 'Sloth', 'Sickly', 'Witless', 'Naive', 'Frightener of Young Children', 'Mighty', 'Swift of Foot', 'Bulwark', 'Clever', 'Sensible', 'Smooth-Talker', 'Living Battering Ram', 'Arrow-Catcher', 'Adamantine', 'Insufferable Genius', 'Sensei', 'Irresistible'] 
+epithets = ['Noodle-Arm', 'Sloth', 'Sickly', 'Witless', 'Naive', 'Frightener of Young Children', 'Mighty', 'Swift of Foot', 'Bulwark', 'Clever', 'Sensible', 'Suave', 'Living Battering Ram', 'Arrow-Catcher', 'Adamantine', 'Insufferable Genius', 'Sage', 'Irresistible'] 
 
 def rollAbility():
-	#This rolls 3 six-sided dice to determine a user's ability score. I was originally going to do the traditional DnD method of rolling 4 six-sided dice and taking the 3 best rolls, but then I decided it would be funnier if there were a higher chance for absurdly low scores.
+	# In traditional DnD fashion, this determines an ability score through 'rolling' four six-sided dice and taking the best 3.
 	ability = 0
-	for i in xrange(1, 4):
+	drop = 6
+	for i in xrange(0, 4):
 		roll = random.randint(1,6)
+		drop = min(roll, drop)
 		ability += roll
+	ability -= drop
 	return ability
 
 def createCharacter(name):
-	#Str = rollAbility()
-	#Dex = rollAbility()
-	#Con = rollAbility()
-	#Int = rollAbility()
-	#Wis = rollAbility()
-	#Cha = rollAbility()
-	#lowest = min(Str, Dex, Con, Int, Wis, Cha)
-	#highest = max(Str, Dex, Con, Int, Wis, Cha)
 	abilities = []
-	for i in xrange(1, 6):
-		abilites.append(rollAbility())
+	for i in xrange(0, 6):
+		abilities.append(rollAbility())
 	highest = max(abilities)
 	lowest = min(abilities)
 	
-	
-
-
 	if (lowest == 10 or lowest == 11) and (highest == 10 or highest == 11):
 		epithet =  "Outstandingly Mediocre"
-	else if highest == 18:
-		for i in xrange(0, 5):
+	elif highest == 18:
+		for i in xrange(0, 6):
 			if abilities[i] == 18:
 				epithet = epithets[i + 12]
 	# The following else if statements are to determine which is more noteworthy, the user's lowest roll or his highest roll.
-	else if (10 - lowest) > (highest - 10):
-		for i in xrange(0, 5):
+	elif (11 - lowest) > (highest - 11):
+		for i in xrange(0, 6):
 			if abilities[i] == lowest:
 				epithet = epithets[i]
 	else:
-		for i in xrange(0, 5):
+		for i in xrange(0, 6):
 			if abilities[i] == highest:
 				epithet = epithets[i + 6]
 			
 	
 	reply = name + " the " + epithet + '\n'
+	reply += "Strength: " + str(abilities[0]) + '\n'
+	reply += "Dexterity: " + str(abilities[1]) + '\n'
+	reply += "Constitution: " + str(abilities[2]) + '\n'
+	reply += "Intelligence: " + str(abilities[3]) + '\n'
+	reply += "Wisdom: " + str(abilities[4]) + '\n'
+	reply += "Charisma: " + str(abilities[5])
+	return reply
 
 if not os.path.isfile("dndme_config.txt"):
     print "You must create the file dndme_config.txt with the pickled credentials."
