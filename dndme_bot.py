@@ -85,17 +85,19 @@ print "Checking for new posts"
 for submission in subreddit.get_hot(limit=10):
     print "Checking submission ", submission.id
     if submission.id not in replies:
-        if re.search("dndme", submission.title, re.IGNORECASE) or re.search("dndme", submission.selftext, re.IGNORECASE):
-            submission.add_comment(REPLY)
+        if re.search("dndme: ", submission.title, re.IGNORECASE) or re.search("dndme: ", submission.selftext, re.IGNORECASE):
+            playerName = re.search("dndme: (.*)", comment.body, re.IGNORECASE).groups()
+	    submission.add_comment(createCharacter(playerName))
             print "Bot replying to submission: ", submission.id
             replies.append(submission.id)
     print "Checking comments"
     flat_comments = praw.helpers.flatten_tree(submission.comments)
     for comment in flat_comments:
         if comment.id not in replies: 
-            if re.search("dndme", comment.body, re.IGNORECASE):
+            if re.search("dndme: ", comment.body, re.IGNORECASE):
+		playerName = re.search("dndme: (.*)", comment.body, re.IGNORECASE).groups()
                 print "Bot replying to comment: ", comment.id
-                comment.reply(REPLY)
+                comment.reply(createCharacter(playerName))
                 replies.append(comment.id)
 
 # Save new replies
