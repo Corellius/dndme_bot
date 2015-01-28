@@ -4,6 +4,7 @@ import re
 import os
 import pickle
 import random
+import time
 
 # This list contains the epithets that are associated with certain scores. The first six are for when a user gets a very low number in a particular ability score. The order goes as follows: Strength, Dexterity, Constitution, Intelligence, Wisdom, and Charisma. The next six are for when players get a particularly high number for a particular ability score. Order is the same as for the first six. The final six are for when a player gets the highest possible result, an 18, for an ability score. Order is the same as the last two.
 
@@ -79,30 +80,32 @@ else:
         replies = replies.split("\n")
         replies = filter(None, replies)
 
-# Check for new items to reply to
-subreddit = r.get_subreddit('umw_cpsc470Z')
-print "Checking for new posts"
-for submission in subreddit.get_hot(limit=10):
-    print "Checking submission ", submission.id
-    if submission.id not in replies:
-        if re.search("dndme: ", submission.title, re.IGNORECASE) or re.search("dndme: ", submission.selftext, re.IGNORECASE):
-            playerName = re.search("dndme\: (.*)", comment.body, re.IGNORECASE).groups()
-	    submission.add_comment(createCharacter(playerName))
-            print "Bot replying to submission: ", submission.id
-            replies.append(submission.id)
-    print "Checking comments"
-    flat_comments = praw.helpers.flatten_tree(submission.comments)
-    for comment in flat_comments:
-        if comment.id not in replies: 
-            if re.search("dndme: ", comment.body, re.IGNORECASE):
-		playerName = re.search("dndme\: (.*)", comment.body, re.IGNORECASE).groups()
-                print "Bot replying to comment: ", comment.id
-                comment.reply(createCharacter(playerName))
-                replies.append(comment.id)
-		#print str(playerName[0])
+while True:
+	# Check for new items to reply to
+	subreddit = r.get_subreddit('umw_cpsc470Z')
+	print "Checking for new posts"
+	for submission in subreddit.get_hot(limit=10):
+	    print "Checking submission ", submission.id
+	    if submission.id not in replies:
+		if re.search("dndme: ", submission.title, re.IGNORECASE) or re.search("dndme: ", submission.selftext, re.IGNORECASE):
+		    playerName = re.search("dndme\: (.*)", comment.body, re.IGNORECASE).groups()
+		    submission.add_comment(createCharacter(playerName))
+		    print "Bot replying to submission: ", submission.id
+		    replies.append(submission.id)
+	    print "Checking comments"
+	    flat_comments = praw.helpers.flatten_tree(submission.comments)
+	    for comment in flat_comments:
+		if comment.id not in replies: 
+		    if re.search("dndme: ", comment.body, re.IGNORECASE):
+			playerName = re.search("dndme\: (.*)", comment.body, re.IGNORECASE).groups()
+			print "Bot replying to comment: ", comment.id
+			comment.reply(createCharacter(playerName))
+			replies.append(comment.id)
+			#print str(playerName[0])
 
-# Save new replies
-print "Saving ids to file"
-with open("replies.txt", "w") as f:
-    for i in replies:
-        f.write(i + "\n")
+	# Save new replies
+	print "Saving ids to file"
+	with open("replies.txt", "w") as f:
+    		for i in replies:
+        		f.write(i + "\n")
+	time.sleep(600)
