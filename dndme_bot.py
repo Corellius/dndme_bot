@@ -86,7 +86,7 @@ for submission in subreddit.get_hot(limit=10):
     print "Checking submission ", submission.id
     if submission.id not in replies:
         if re.search("dndme: ", submission.title, re.IGNORECASE) or re.search("dndme: ", submission.selftext, re.IGNORECASE):
-            playerName = re.search("dndme: (.*)", comment.body, re.IGNORECASE).groups()
+            playerName = re.search("dndme\: (.*)", comment.body, re.IGNORECASE).groups()
 	    submission.add_comment(createCharacter(playerName))
             print "Bot replying to submission: ", submission.id
             replies.append(submission.id)
@@ -95,7 +95,7 @@ for submission in subreddit.get_hot(limit=10):
     for comment in flat_comments:
         if comment.id not in replies: 
             if re.search("dndme: ", comment.body, re.IGNORECASE):
-		playerName = re.search("dndme: (.*)", comment.body, re.IGNORECASE).groups()
+		playerName = re.search("dndme\: (.*)", comment.body, re.IGNORECASE).groups()
                 print "Bot replying to comment: ", comment.id
                 comment.reply(createCharacter(playerName))
                 replies.append(comment.id)
