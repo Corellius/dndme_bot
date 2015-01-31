@@ -5,9 +5,12 @@ import os
 import pickle
 import random
 import time
+import urllib2
+import simplejson
 
-# This list contains the epithets that are associated with certain scores. The first six are for when a user gets a very low number in a particular ability score. The order goes as follows: Strength, Dexterity, Constitution, Intelligence, Wisdom, and Charisma. The next six are for when players get a particularly high number for a particular ability score. Order is the same as for the first six. The final six are for when a player gets the highest possible result, an 18, for an ability score. Order is the same as the last two.
+# The epithets list contains the titles that are associated with certain scores. The first six are for when a user gets a very low number in a particular ability score. The order goes as follows: Strength, Dexterity, Constitution, Intelligence, Wisdom, and Charisma. The next six are for when players get a particularly high number for a particular ability score. Order is the same as for the first six. The final six are for when a player gets the highest possible result, an 18, for an ability score. Order is the same as the last two.
 
+races = ['Human', 'Elf', 'Dwarf', 'Half-Orc', 'Halfling', 'Gnome', 'Half-Elf']
 classes = ['Fighter', 'Rogue', 'Knight', 'Wizard', 'Cleric', 'Bard']
 epithets = ['Noodle-Arm', 'Sloth', 'Sickly', 'Witless', 'Naive', 'Frightener of Young Children', 'Mighty', 'Swift of Foot', 'Bulwark', 'Clever', 'Sensible', 'Suave', 'Living Battering Ram', 'Arrow-Catcher', 'Adamantine', 'Insufferable Genius', 'Sage', 'Irresistible'] 
 
@@ -28,7 +31,7 @@ def createCharacter(name):
 		abilities.append(rollAbility())
 	highest = max(abilities)
 	lowest = min(abilities)
-	
+	race = random.randint(0,6)
 	if (lowest == 10 or lowest == 11) and (highest == 10 or highest == 11):
 		epithet =  "Outstandingly Mediocre"
 		cClass = 'Commoner'
@@ -49,16 +52,25 @@ def createCharacter(name):
 			if abilities[i] == highest:
 				epithet = epithets[i + 6]
 				cClass = classes[i]
-			
+
+	url = ('https://ajax.googleapis.com/ajax/services/search/images?' + 'v=1.0&q=' + races[race] + '%20' + cClass + '&userip=INSERT-USER-IP')
+	request = urllib2.Request(url, None, {'Referer': 'https://www.reddit.com/r/umw_cpsc470Z/'})
+	response = urllib2.urlopen(request)	
 	
+	results = simplejson.load(response)
+
+	imageLink = str(results["responseData"]["cursor"]["moreResultsUrl"])
+
 	reply = str(name[0]) + " the " + epithet + '\n\n'
+	reply += "Race: " + races[race] + '\n\n'
 	reply += "Class: " + cClass + '\n\n'
 	reply += "Strength: " + str(abilities[0]) + '\n\n'
 	reply += "Dexterity: " + str(abilities[1]) + '\n\n'
 	reply += "Constitution: " + str(abilities[2]) + '\n\n'
 	reply += "Intelligence: " + str(abilities[3]) + '\n\n'
 	reply += "Wisdom: " + str(abilities[4]) + '\n\n'
-	reply += "Charisma: " + str(abilities[5])
+	reply += "Charisma: " + str(abilities[5]) + '\n\n'
+	reply += imageLink
 	return reply
 
 if not os.path.isfile("dndme_config.txt"):

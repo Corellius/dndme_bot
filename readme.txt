@@ -1,10 +1,12 @@
 DnD Me Bot
 This bot will respond to a comment that says "dndme: 'character_name'" with a very rudimentary character sheet containing randomly generated ability scores and a title for the character that describes their most outstanding ability score (either outstandingly high or outstandingly low). The bot will also name what class the player should be based off their highest ability score (Str = Fighter, Dex = Rogue, Con = Knight, Int = Wizard, Wis = Cleric, Cha = Bard). Additional features, such as random race, may be added in later versions.
+New feature: The bot will now perform a google search for the race and class name generated to give the user some possible appearances for their character.
 E.g.
 Original Comment: 
 dndme: Waluigi
 Bot Reply:
 Waluigi the Arrow-Catcher
+Race: Elf
 Class: Rogue
 Strength: 10
 Dexterity: 18
@@ -12,8 +14,9 @@ Constitution: 6
 Intelligence: 13
 Wisdom: 9
 Charisma: 16
+http://www.google.com/images?oe=utf8&ie=utf8&source=uds&start=0&hl=en&q=Elf+Rogue
 
-# Waluigi was labled as 'the Arrow-Catcher' because he got the highest possible Dexterity score of 18, which makes him a rogue.
+# Waluigi was labled as 'the Arrow-Catcher' because he got the highest possible Dexterity score of 18, which makes him a rogue. The bot then did a google image search for "Elf Rogue" to give some options for his character appearance.
 
 Original Comment
 dndme: Wario
