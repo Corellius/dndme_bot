@@ -8,6 +8,7 @@ import time
 
 # This list contains the epithets that are associated with certain scores. The first six are for when a user gets a very low number in a particular ability score. The order goes as follows: Strength, Dexterity, Constitution, Intelligence, Wisdom, and Charisma. The next six are for when players get a particularly high number for a particular ability score. Order is the same as for the first six. The final six are for when a player gets the highest possible result, an 18, for an ability score. Order is the same as the last two.
 
+classes = ['Fighter', 'Rogue', 'Knight', 'Wizard', 'Cleric', 'Bard']
 epithets = ['Noodle-Arm', 'Sloth', 'Sickly', 'Witless', 'Naive', 'Frightener of Young Children', 'Mighty', 'Swift of Foot', 'Bulwark', 'Clever', 'Sensible', 'Suave', 'Living Battering Ram', 'Arrow-Catcher', 'Adamantine', 'Insufferable Genius', 'Sage', 'Irresistible'] 
 
 def rollAbility():
@@ -30,22 +31,28 @@ def createCharacter(name):
 	
 	if (lowest == 10 or lowest == 11) and (highest == 10 or highest == 11):
 		epithet =  "Outstandingly Mediocre"
+		cClass = 'Commoner'
 	elif highest == 18:
 		for i in xrange(0, 6):
 			if abilities[i] == 18:
 				epithet = epithets[i + 12]
+				cClass = classes[i]
 	# The following else if statements are to determine which is more noteworthy, the user's lowest roll or his highest roll.
 	elif (11 - lowest) > (highest - 11):
 		for i in xrange(0, 6):
 			if abilities[i] == lowest:
 				epithet = epithets[i]
+			if abilities[i] == highest:
+				cClass = classes[i]
 	else:
 		for i in xrange(0, 6):
 			if abilities[i] == highest:
 				epithet = epithets[i + 6]
+				cClass = classes[i]
 			
 	
 	reply = str(name[0]) + " the " + epithet + '\n\n'
+	reply += "Class: " + cClass + '\n\n'
 	reply += "Strength: " + str(abilities[0]) + '\n\n'
 	reply += "Dexterity: " + str(abilities[1]) + '\n\n'
 	reply += "Constitution: " + str(abilities[2]) + '\n\n'
@@ -108,4 +115,4 @@ while True:
 	with open("replies.txt", "w") as f:
     		for i in replies:
         		f.write(i + "\n")
-	time.sleep(600)
+	time.sleep(300)
